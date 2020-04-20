@@ -4,31 +4,23 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserGroup } from "./UserGroup";
+import { User } from "./User";
 
 @Entity()
 @ObjectType()
-export class User extends BaseEntity {
+export class UserGroup extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: string;
 
   @Field(() => String)
   @Column()
-  username: string;
+  name: string;
 
-  @Field(() => String)
-  @Column()
-  email: string;
-
-  @Field(() => String)
-  @Column()
-  password: string;
-
-  @ManyToOne(() => UserGroup)
+  @OneToOne(() => User)
   @JoinColumn()
-  group: UserGroup;
+  admin: User;
 }

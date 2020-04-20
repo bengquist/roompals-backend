@@ -1,5 +1,13 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { UserGroup } from "./UserGroup";
 
 @Entity()
 @ObjectType()
@@ -27,4 +35,8 @@ export class Chore extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   isCompleted: false;
+
+  @ManyToOne(() => UserGroup)
+  @JoinColumn()
+  group: UserGroup;
 }
