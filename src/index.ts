@@ -6,7 +6,7 @@ import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8163;
 
 async function main() {
   await createConnection();
