@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { User } from "./User";
 import { UserGroup } from "./UserGroup";
 
 @Entity()
@@ -36,7 +37,11 @@ export class Chore extends BaseEntity {
   @Column({ default: false })
   isCompleted: false;
 
-  @ManyToOne(() => UserGroup)
+  @ManyToOne(() => User, (user) => user.chores)
+  @JoinColumn()
+  user: User;
+
+  @ManyToOne(() => UserGroup, (group) => group.chores)
   @JoinColumn()
   group: UserGroup;
 }

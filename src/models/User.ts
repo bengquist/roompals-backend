@@ -3,10 +3,11 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Chore } from "./Chore";
 import { UserGroup } from "./UserGroup";
 
 @Entity()
@@ -28,7 +29,11 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @ManyToOne(() => UserGroup)
-  @JoinColumn()
+  @Field(() => [Chore])
+  @OneToMany(() => Chore, (chore) => chore)
+  chores: Chore[];
+
+  @Field(() => [UserGroup])
+  @ManyToOne(() => UserGroup, (group) => group.users)
   group: UserGroup;
 }

@@ -3,10 +3,11 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Chore } from "./Chore";
 import { User } from "./User";
 
 @Entity()
@@ -20,7 +21,15 @@ export class UserGroup extends BaseEntity {
   @Column()
   name: string;
 
+  @Field(() => User)
   @OneToOne(() => User)
-  @JoinColumn()
   admin: User;
+
+  @Field(() => [Chore])
+  @OneToMany(() => Chore, (chore) => chore)
+  chores: Chore[];
+
+  @Field(() => [User])
+  @OneToMany(() => User, (user) => user.group)
+  users: User[];
 }
