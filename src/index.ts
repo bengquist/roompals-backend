@@ -1,16 +1,33 @@
-import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
+import cors from "cors";
+import express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 
+const port = process.env.PORT || 4000;
+
 async function main() {
   await createConnection();
+
   const schema = await buildSchema({
     resolvers: [ChoreResolver],
   });
+
   const server = new ApolloServer({ schema });
-  await server.listen(4000, () => console.log("Server has started!"));
+
+  const app = express();
+
+  app.use(cors());
+
+  server.applyMiddleware({ app, path: "/" });
+
+  app.listen({ port }, () => {
+    console.log(
+      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+    );
+  });
 }
 
 main();
