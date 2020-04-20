@@ -30,7 +30,7 @@ export class User extends BaseEntity {
   password: string;
 
   @Field(() => [Chore])
-  @OneToMany(() => Chore, (chore) => chore)
+  @OneToMany(() => Chore, (chore) => chore.user)
   chores: Chore[];
 
   @Field(() => [UserGroup])

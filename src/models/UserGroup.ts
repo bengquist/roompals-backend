@@ -26,7 +26,7 @@ export class UserGroup extends BaseEntity {
   admin: User;
 
   @Field(() => [Chore])
-  @OneToMany(() => Chore, (chore) => chore)
+  @OneToMany(() => Chore, (chore) => chore.group)
   chores: Chore[];
 
   @Field(() => [User])
