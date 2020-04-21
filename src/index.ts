@@ -11,7 +11,7 @@ import { UserResolver } from "./resolvers/UserResolver";
 
 const port = process.env.PORT || 8163;
 
-async function main() {
+(async () => {
   await createConnection();
 
   const schema = await buildSchema({
@@ -34,6 +34,4 @@ async function main() {
       `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     );
   });
-}
-
-main();
+})();
