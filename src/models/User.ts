@@ -33,7 +33,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Chore, (chore) => chore.user)
   chores: Chore[];
 
-  @Field(() => [UserGroup])
+  @Field(() => UserGroup)
   @ManyToOne(() => UserGroup, (group) => group.users)
   group: UserGroup;
 }

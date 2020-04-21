@@ -2,6 +2,7 @@ import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { CreateChoreInput } from "../inputs/CreateChoreInput";
 import { Chore } from "../models/Chore";
 import { User } from "../models/User";
+import { UserGroup } from "../models/UserGroup";
 
 @Resolver()
 export class ChoreResolver {
@@ -13,8 +14,12 @@ export class ChoreResolver {
   @Mutation(() => Chore)
   async createChore(@Arg("data") data: CreateChoreInput) {
     const chore = Chore.create(data);
-    const users = await User.find();
-    chore.user = users[0];
+    const user = await User.findOne({ where: { id: data.ownerId } });
+    const group = await UserGroup.findOne({ where: { id: data.groupId } });
+
+    if (user) chore.user = user;
+    if (group) chore.group = group;
+
     await chore.save();
     return chore;
   }

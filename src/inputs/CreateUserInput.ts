@@ -11,6 +11,6 @@ export class CreateUserInput {
   @Field()
   password: string;
 
-  @Field()
-  groupId: string;
+  @Field({ nullable: true })
+  groupCode?: string;
 }

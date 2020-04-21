@@ -4,6 +4,11 @@ import { User } from "../models/User";
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User)
+  async user(@Arg("id") id: string) {
+    return User.findOne({ where: { id }, relations: ["group"] });
+  }
+
   @Query(() => [User])
   users() {
     return User.find();

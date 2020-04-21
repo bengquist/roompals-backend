@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -21,15 +22,24 @@ export class UserGroup extends BaseEntity {
   @Column()
   name: string;
 
+  @Field(() => String)
+  @Column()
+  code: string;
+
   @Field(() => User)
   @OneToOne(() => User)
+  @JoinColumn()
   admin: User;
 
   @Field(() => [Chore])
-  @OneToMany(() => Chore, (chore) => chore.group)
+  @OneToMany(() => Chore, (chore) => chore.group, {
+    cascade: true,
+  })
   chores: Chore[];
 
   @Field(() => [User])
-  @OneToMany(() => User, (user) => user.group)
+  @OneToMany(() => User, (user) => user.group, {
+    cascade: true,
+  })
   users: User[];
 }

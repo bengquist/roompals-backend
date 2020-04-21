@@ -5,7 +5,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
-import { UserGroupResolver } from "./resolvers/GroupResolver";
+import { UserGroupResolver } from "./resolvers/UserGroupResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 
 const port = process.env.PORT || 8163;

@@ -3,7 +3,6 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -23,10 +22,6 @@ export class Chore extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  owner: string;
-
-  @Field(() => String)
-  @Column()
   emoji: string;
 
   @Field(() => String)
@@ -37,11 +32,11 @@ export class Chore extends BaseEntity {
   @Column({ default: false })
   isCompleted: false;
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.chores)
-  @JoinColumn()
   user: User;
 
+  @Field(() => UserGroup)
   @ManyToOne(() => UserGroup, (group) => group.chores)
-  @JoinColumn()
   group: UserGroup;
 }
