@@ -7,7 +7,11 @@ import { verify } from "jsonwebtoken";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
-import { createAccessToken } from "./helpers";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "./helpers";
 import { User } from "./models/User";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 import { UserGroupResolver } from "./resolvers/UserGroupResolver";
@@ -23,6 +27,8 @@ const port = process.env.PORT || 8163;
 
   app.post("/refresh_token", async (req, res) => {
     const token = req.cookies.token;
+
+    console.log(token);
 
     if (!token) {
       return res.send({ ok: false, accessToken: "" });
@@ -41,7 +47,9 @@ const port = process.env.PORT || 8163;
       return res.send({ ok: false, acessToken: "" });
     }
 
-    return res.send({ ok: false, acessToken: createAccessToken(user.id) });
+    sendRefreshToken(res, createRefreshToken(user.id));
+
+    return res.send({ ok: true, acessToken: createAccessToken(user.id) });
   });
 
   const schema = await buildSchema({

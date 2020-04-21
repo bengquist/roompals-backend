@@ -8,7 +8,11 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { createAccessToken, createRefreshToken } from "../helpers";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "../helpers";
 import { CreateUserInput } from "../inputs/CreateUserInput";
 import { isAuth } from "../isAuth";
 import { User } from "../models/User";
@@ -50,12 +54,9 @@ export class UserResolver {
       throw new AuthenticationError("Incorrect password");
     }
 
-    const refreshToken = createRefreshToken(userData.id);
-    const accessToken = createAccessToken(userData.id);
+    sendRefreshToken(res, createRefreshToken(userData.id));
 
-    res.cookie("token", refreshToken, { httpOnly: true });
-
-    return { accessToken };
+    return { accessToken: createAccessToken(userData.id) };
   }
 
   @Mutation(() => Boolean)

@@ -1,3 +1,4 @@
+import { Response } from "express";
 import { sign } from "jsonwebtoken";
 
 const { JWT_ACCESS_TOKEN_SECRET, JWT_REFRESH_TOKEN_SECRET } = process.env;
@@ -8,4 +9,8 @@ export const createAccessToken = (userId: string) => {
 
 export const createRefreshToken = (userId: string) => {
   return sign({ userId }, JWT_REFRESH_TOKEN_SECRET!, { expiresIn: "365d" });
+};
+
+export const sendRefreshToken = (res: Response, token: string) => {
+  res.cookie("token", token, { httpOnly: true });
 };

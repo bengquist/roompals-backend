@@ -19,11 +19,11 @@ export class UserGroup extends BaseEntity {
   id: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   name: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   code: string;
 
   @Field(() => User)

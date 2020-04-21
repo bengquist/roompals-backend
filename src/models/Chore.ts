@@ -17,19 +17,19 @@ export class Chore extends BaseEntity {
   id: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   title: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   emoji: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   cycleDate: string;
 
   @Field(() => Boolean)
-  @Column({ default: false })
+  @Column("bool", { default: false })
   isCompleted: false;
 
   @Field(() => User)

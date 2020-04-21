@@ -18,15 +18,18 @@ export class User extends BaseEntity {
   id: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   username: string;
 
   @Field(() => String)
-  @Column()
+  @Column("text")
   email: string;
 
-  @Column()
+  @Column("text")
   password: string;
+
+  @Column("int", { default: 1 })
+  tokenVersion: number;
 
   @Field(() => [Chore])
   @OneToMany(() => Chore, (chore) => chore.user)
