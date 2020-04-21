@@ -1,10 +1,14 @@
 import { ApolloServer } from "apollo-server-express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import { verify } from "jsonwebtoken";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
+import { createAccessToken } from "./helpers";
+import { User } from "./models/User";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 import { UserGroupResolver } from "./resolvers/UserGroupResolver";
 import { UserResolver } from "./resolvers/UserResolver";
@@ -14,6 +18,32 @@ const port = process.env.PORT || 8163;
 (async () => {
   await createConnection();
 
+  const app = express();
+  app.use(cookieParser()).use(cors());
+
+  app.post("/refresh_token", async (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res.send({ ok: false, accessToken: "" });
+    }
+
+    let payload: any = null;
+    try {
+      payload = verify(token, process.env.JWT_REFRESH_TOKEN_SECRET!);
+    } catch (err) {
+      return res.send({ ok: false, acessToken: "" });
+    }
+
+    const user = await User.findOne({ where: { id: payload.userId } });
+
+    if (!user) {
+      return res.send({ ok: false, acessToken: "" });
+    }
+
+    return res.send({ ok: false, acessToken: createAccessToken(user.id) });
+  });
+
   const schema = await buildSchema({
     resolvers: [ChoreResolver, UserResolver, UserGroupResolver],
   });
@@ -22,10 +52,6 @@ const port = process.env.PORT || 8163;
     schema,
     context: ({ req, res }) => ({ req, res }),
   });
-
-  const app = express();
-
-  app.use(cors());
 
   server.applyMiddleware({ app, path: "/" });
 
