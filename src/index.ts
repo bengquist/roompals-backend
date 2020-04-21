@@ -11,7 +11,7 @@ import {
   createAccessToken,
   createRefreshToken,
   sendRefreshToken,
-} from "./helpers";
+} from "./auth";
 import { User } from "./models/User";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 import { UserGroupResolver } from "./resolvers/UserGroupResolver";

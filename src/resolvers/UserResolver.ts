@@ -12,9 +12,9 @@ import {
   createAccessToken,
   createRefreshToken,
   sendRefreshToken,
-} from "../helpers";
+} from "../auth";
 import { CreateUserInput } from "../inputs/CreateUserInput";
-import { isAuth } from "../isAuth";
+import { isAuth } from "../middleware/isAuth";
 import { User } from "../models/User";
 import { LoginResponse } from "../responses/LoginResponse";
 import { AppContext } from "../types";
