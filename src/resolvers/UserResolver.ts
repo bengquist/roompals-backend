@@ -1,8 +1,16 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { createAccessToken, createRefreshToken } from "../helpers";
 import { CreateUserInput } from "../inputs/CreateUserInput";
+import { isAuth } from "../isAuth";
 import { User } from "../models/User";
 import { LoginResponse } from "../responses/LoginResponse";
 import { AppContext } from "../types";
@@ -15,6 +23,7 @@ export class UserResolver {
   }
 
   @Query(() => [User])
+  @UseMiddleware(isAuth)
   users() {
     return User.find({ relations: ["group", "chores"] });
   }
