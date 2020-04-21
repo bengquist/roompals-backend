@@ -8,16 +8,16 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import {
-  createAccessToken,
-  createRefreshToken,
-  sendRefreshToken,
-} from "../auth";
 import { CreateUserInput } from "../inputs/CreateUserInput";
 import { isAuth } from "../middleware/isAuth";
 import { User } from "../models/User";
 import { LoginResponse } from "../responses/LoginResponse";
 import { AppContext } from "../types";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "../utils/auth";
 
 @Resolver()
 export class UserResolver {

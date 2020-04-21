@@ -7,15 +7,15 @@ import { verify } from "jsonwebtoken";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
-import {
-  createAccessToken,
-  createRefreshToken,
-  sendRefreshToken,
-} from "./auth";
 import { User } from "./models/User";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 import { UserGroupResolver } from "./resolvers/UserGroupResolver";
 import { UserResolver } from "./resolvers/UserResolver";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "./utils/auth";
 
 const port = process.env.PORT || 8163;
 
