@@ -54,6 +54,7 @@ const port = process.env.PORT || 8163;
 
   const schema = await buildSchema({
     resolvers: [ChoreResolver, UserResolver, UserGroupResolver],
+    validate: false,
   });
 
   const server = new ApolloServer({
