@@ -6,12 +6,12 @@ import { User } from "../models/User";
 export class UserResolver {
   @Query(() => User)
   async user(@Arg("id") id: string) {
-    return User.findOne({ where: { id }, relations: ["group"] });
+    return User.findOne({ where: { id }, relations: ["group", "chores"] });
   }
 
   @Query(() => [User])
   users() {
-    return User.find();
+    return User.find({ relations: ["group", "chores"] });
   }
 
   @Mutation(() => User)

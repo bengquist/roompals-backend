@@ -7,8 +7,13 @@ import { UserGroup } from "../models/UserGroup";
 @Resolver()
 export class ChoreResolver {
   @Query(() => [Chore])
+  chore(@Arg("id") id: string) {
+    return Chore.findOne({ where: { id }, relations: ["user", "group"] });
+  }
+
+  @Query(() => [Chore])
   chores() {
-    return Chore.find();
+    return Chore.find({ relations: ["user", "group"] });
   }
 
   @Mutation(() => Chore)
