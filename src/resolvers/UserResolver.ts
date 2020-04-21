@@ -1,8 +1,11 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { createAccessToken, createRefreshToken } from "../helpers";
 import { CreateUserInput } from "../inputs/CreateUserInput";
 import { User } from "../models/User";
+import { LoginResponse } from "../responses/LoginResponse";
+import { AppContext } from "../types";
 
 @Resolver()
 export class UserResolver {
@@ -16,23 +19,34 @@ export class UserResolver {
     return User.find({ relations: ["group", "chores"] });
   }
 
-  @Mutation(() => User)
-  async login(@Arg("user") user: string, @Arg("password") password: string) {
+  @Mutation(() => LoginResponse)
+  async login(
+    @Arg("user") user: string,
+    @Arg("password") password: string,
+    @Ctx() { req, res }: AppContext
+  ): Promise<LoginResponse> {
     const userData = await User.findOne({
       where: [{ username: user }, { email: user }],
     });
 
     if (!userData) {
-      throw new AuthenticationError("No user with that username or email");
+      throw new AuthenticationError(
+        "Could not find a user with that username or email"
+      );
     }
 
-    const isCorrectPassword = await bcrypt.compare(password, userData.password);
+    const isValidPassword = await bcrypt.compare(password, userData.password);
 
-    if (!isCorrectPassword) {
+    if (!isValidPassword) {
       throw new AuthenticationError("Incorrect password");
     }
 
-    return userData;
+    const refreshToken = createRefreshToken(userData.id);
+    const accessToken = createAccessToken(userData.id);
+
+    res.cookie("token", refreshToken, { httpOnly: true });
+
+    return { accessToken };
   }
 
   @Mutation(() => Boolean)

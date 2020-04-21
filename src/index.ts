@@ -17,7 +17,10 @@ async function main() {
     resolvers: [ChoreResolver, UserResolver, UserGroupResolver],
   });
 
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({ req, res }),
+  });
 
   const app = express();
 
