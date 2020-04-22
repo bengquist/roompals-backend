@@ -13,7 +13,7 @@ import { UserGroup } from "./UserGroup";
 @ObjectType()
 export class Chore extends BaseEntity {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Field(() => String)

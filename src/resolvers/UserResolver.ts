@@ -3,11 +3,13 @@ import bcrypt from "bcrypt";
 import {
   Arg,
   Ctx,
+  Int,
   Mutation,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { getConnection } from "typeorm";
 import { CreateUserInput } from "../inputs/CreateUserInput";
 import { isAuth } from "../middleware/isAuth";
 import { User } from "../models/User";
@@ -38,6 +40,7 @@ export class UserResolver {
     @Arg("password") password: string,
     @Ctx() { req, res }: AppContext
   ): Promise<LoginResponse> {
+    console.log(user);
     const userData = await User.findOne({
       where: [{ username: user }, { email: user }],
     });
@@ -54,7 +57,7 @@ export class UserResolver {
       throw new AuthenticationError("Incorrect password");
     }
 
-    sendRefreshToken(res, createRefreshToken(userData.id));
+    sendRefreshToken(res, createRefreshToken(userData));
 
     return { accessToken: createAccessToken(userData.id) };
   }
@@ -83,6 +86,16 @@ export class UserResolver {
       console.log(err);
       return false;
     }
+
+    return true;
+  }
+
+  //only use this for testing
+  @Mutation(() => Boolean)
+  async revokeRefreshToken(@Arg("userId", () => Int) userId: string) {
+    await getConnection()
+      .getRepository(User)
+      .increment({ id: userId }, "tokenVersion", 1);
 
     return true;
   }

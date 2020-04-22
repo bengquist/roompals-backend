@@ -14,7 +14,7 @@ import { UserGroup } from "./UserGroup";
 @ObjectType()
 export class User extends BaseEntity {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Field(() => String)

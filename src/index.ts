@@ -3,19 +3,13 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
-import { verify } from "jsonwebtoken";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
-import { User } from "./models/User";
 import { ChoreResolver } from "./resolvers/ChoreResolver";
 import { UserGroupResolver } from "./resolvers/UserGroupResolver";
 import { UserResolver } from "./resolvers/UserResolver";
-import {
-  createAccessToken,
-  createRefreshToken,
-  sendRefreshToken,
-} from "./utils/auth";
+import refreshToken from "./utils/refreshToken";
 
 const port = process.env.PORT || 8163;
 
@@ -23,34 +17,9 @@ const port = process.env.PORT || 8163;
   await createConnection();
 
   const app = express();
-  app.use(cookieParser()).use(cors());
+  app.use("/refresh_token", cookieParser()).use(cors());
 
-  app.post("/refresh_token", async (req, res) => {
-    const token = req.cookies.token;
-
-    console.log(token);
-
-    if (!token) {
-      return res.send({ ok: false, accessToken: "" });
-    }
-
-    let payload: any = null;
-    try {
-      payload = verify(token, process.env.JWT_REFRESH_TOKEN_SECRET!);
-    } catch (err) {
-      return res.send({ ok: false, acessToken: "" });
-    }
-
-    const user = await User.findOne({ where: { id: payload.userId } });
-
-    if (!user) {
-      return res.send({ ok: false, acessToken: "" });
-    }
-
-    sendRefreshToken(res, createRefreshToken(user.id));
-
-    return res.send({ ok: true, acessToken: createAccessToken(user.id) });
-  });
+  app.post("/refresh_token", refreshToken);
 
   const schema = await buildSchema({
     resolvers: [ChoreResolver, UserResolver, UserGroupResolver],
