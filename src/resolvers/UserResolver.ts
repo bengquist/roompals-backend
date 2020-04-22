@@ -10,7 +10,6 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CreateUserInput } from "../inputs/CreateUserInput";
 import { isAuth } from "../middleware/isAuth";
 import { User } from "../models/User";
 import { LoginResponse } from "../responses/LoginResponse";
@@ -40,7 +39,6 @@ export class UserResolver {
     @Arg("password") password: string,
     @Ctx() { req, res }: AppContext
   ): Promise<LoginResponse> {
-    console.log(user);
     const userData = await User.findOne({
       where: [{ username: user }, { email: user }],
     });
@@ -59,11 +57,17 @@ export class UserResolver {
 
     sendRefreshToken(res, createRefreshToken(userData));
 
+    console.log(userData);
+
     return { accessToken: createAccessToken(userData.id) };
   }
 
   @Mutation(() => Boolean)
-  async signup(@Arg("data") { username, email, password }: CreateUserInput) {
+  async signup(
+    @Arg("username") username: string,
+    @Arg("email") email: string,
+    @Arg("password") password: string
+  ) {
     const userWithUsername = await User.findOne({ username });
     const userWithEmail = await User.findOne({ email });
 
