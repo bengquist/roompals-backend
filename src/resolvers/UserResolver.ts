@@ -57,8 +57,6 @@ export class UserResolver {
 
     sendRefreshToken(res, createRefreshToken(userData));
 
-    console.log(userData);
-
     return { accessToken: createAccessToken(userData.id) };
   }
 
@@ -87,7 +85,7 @@ export class UserResolver {
         password: hashedPassword,
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return false;
     }
 
