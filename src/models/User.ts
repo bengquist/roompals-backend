@@ -31,6 +31,9 @@ export class User extends BaseEntity {
   @Column("int", { default: 0 })
   tokenVersion: number;
 
+  @Column("bool", { default: true })
+  newUser: number;
+
   @Field(() => [Chore])
   @OneToMany(() => Chore, (chore) => chore.user)
   chores: Chore[];
