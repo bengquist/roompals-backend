@@ -1,5 +1,6 @@
 import { AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
+import { verify } from "jsonwebtoken";
 import {
   Arg,
   Ctx,
@@ -22,6 +23,25 @@ import {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  me(@Ctx() context: AppContext) {
+    const authorization = context.req.headers["authorization"];
+
+    if (!authorization) {
+      return null;
+    }
+
+    try {
+      const token = authorization?.split(" ")[1];
+      const payload: any = verify(token, process.env.JWT_ACCESS_TOKEN_SECRET!);
+      context.payload = payload as any;
+      return User.findOne(payload.userId);
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
   @Query(() => User)
   user(@Arg("id") id: string) {
     return User.findOne({ where: { id }, relations: ["group", "chores"] });
