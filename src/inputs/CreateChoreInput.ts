@@ -6,10 +6,10 @@ export class CreateChoreInput {
   title: string;
 
   @Field()
-  ownerId: number;
+  ownerId: string;
 
   @Field()
-  groupId: number;
+  groupId: string;
 
   @Field()
   emoji: string;

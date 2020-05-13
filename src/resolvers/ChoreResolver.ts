@@ -19,10 +19,12 @@ export class ChoreResolver {
   @Mutation(() => Chore)
   async createChore(@Arg("data") data: CreateChoreInput) {
     const chore = Chore.create(data);
-    const user = await User.findOne({ where: { id: data.ownerId } });
-    const group = await UserGroup.findOne({ where: { id: data.groupId } });
+    const user = await User.findOne(data.ownerId);
+    const group = await UserGroup.findOne(data.groupId);
 
-    if (user) chore.user = user;
+    console.log(user);
+    console.log(group);
+    if (user) chore.owner = user;
     if (group) chore.group = group;
 
     await chore.save();

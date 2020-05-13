@@ -34,7 +34,7 @@ export class Chore extends BaseEntity {
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.chores)
-  user: User;
+  owner: User;
 
   @Field(() => UserGroup)
   @ManyToOne(() => UserGroup, (group) => group.chores)

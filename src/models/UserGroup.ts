@@ -23,7 +23,7 @@ export class UserGroup extends BaseEntity {
   name: string;
 
   @Field(() => String)
-  @Column("text")
+  @Column("text", { unique: true })
   code: string;
 
   @Field(() => User)

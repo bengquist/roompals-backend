@@ -18,11 +18,11 @@ export class User extends BaseEntity {
   id: string;
 
   @Field(() => String)
-  @Column("text")
+  @Column("text", { unique: true })
   username: string;
 
   @Field(() => String)
-  @Column("text")
+  @Column("text", { unique: true })
   email: string;
 
   @Column("text")
@@ -35,7 +35,7 @@ export class User extends BaseEntity {
   newUser: number;
 
   @Field(() => [Chore])
-  @OneToMany(() => Chore, (chore) => chore.user)
+  @OneToMany(() => Chore, (chore) => chore.owner)
   chores: Chore[];
 
   @Field(() => UserGroup)
