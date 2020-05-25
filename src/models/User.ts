@@ -34,11 +34,11 @@ export class User extends BaseEntity {
   @Column("bool", { default: true })
   newUser: number;
 
-  @Field(() => [Chore])
+  @Field(() => [Chore], { nullable: true })
   @OneToMany(() => Chore, (chore) => chore.owner)
   chores: Chore[];
 
-  @Field(() => UserGroup)
+  @Field(() => UserGroup, { nullable: true })
   @ManyToOne(() => UserGroup, (group) => group.users)
   group: UserGroup;
 }

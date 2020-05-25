@@ -21,7 +21,11 @@ export default async (req: Request, res: Response) => {
     return res.send({ ok: false, accessToken: "" });
   }
 
-  const user = await User.findOne({ where: { id: payload.userId } });
+  if (!payload) {
+    return res.send({ ok: false, accessToken: "" });
+  }
+
+  const user = await User.findOne(payload.userId);
 
   if (!user) {
     return res.send({ ok: false, accessToken: "" });
