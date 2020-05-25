@@ -35,4 +35,19 @@ export class UserGroupResolver {
     await group.save();
     return group;
   }
+
+  @Mutation(() => UserGroup)
+  async joinUserGroup(
+    @Arg("userId") userId: string,
+    @Arg("groupId") groupId: string
+  ) {
+    const user = await User.findOne(userId);
+    const group = await UserGroup.findOne(groupId);
+
+    if (!group) {
+      throw new Error("No group found with that name");
+    }
+
+    if (user?.group) user.group = group;
+  }
 }
