@@ -24,7 +24,7 @@ export class UserGroupResolver {
     @Arg("data") { adminId, ...data }: CreateUserGroupInput
   ) {
     const group = await UserGroup.create(data);
-    const admin = await User.findOne({ where: { id: adminId } });
+    const admin = await User.findOne(adminId);
     const chores = await Chore.find();
 
     if (admin) group.admin = admin;
