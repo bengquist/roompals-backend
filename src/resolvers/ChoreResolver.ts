@@ -22,8 +22,6 @@ export class ChoreResolver {
     const user = await User.findOne(data.ownerId);
     const group = await UserGroup.findOne(data.groupId);
 
-    console.log(user);
-    console.log(group);
     if (user) chore.owner = user;
     if (group) chore.group = group;
 
